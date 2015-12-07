@@ -1,6 +1,8 @@
-frontend-nanodegree-arcade-game
-===============================
+#Frogger Game#
+Here we have my implementation for the classic video game Frogger. 
 
-Students should use this [rubric](https://www.udacity.com/course/viewer/#!/c-nd001/l-2696458597/m-2687128535) for self-checking their submission.
+###How to run the game###
+Getting started is easy, simply open index.html and the game will begin running.
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
+###How to play the game###
+The game objective is to make the player reach the water as many times without being hit by a moving enemy. The player can be controlled using the directional keys (up, down, left, right) on the keyboard. There is a scoreboard on the top right corner showing how many times the player has successfully made it to the water without being hit. 
