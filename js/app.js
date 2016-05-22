@@ -33,7 +33,7 @@ var Player = function() {
     this.x = PLAYER_X;
     this.y = PLAYER_Y;
     // set character image
-    this.sprite = 'images/char-boy.png';
+    this.sprite = 'images/char-cat-girl.png';
 };
 
 // variables holding the player's initial position and score;
@@ -81,13 +81,13 @@ Player.prototype.handleInput = function(key) {
 
 
 // instantiate player
-player = new Player;
+player = new Player();
 
 // instantiate enemies
 var allEnemies = [];
 
 for (var i = 0; i < 3; i++) {
-    var enemy = new Enemy;
+    var enemy = new Enemy();
     // set varying initial positions
     enemy.x = i * 200;
     enemy.y = 40 + (i * 100);

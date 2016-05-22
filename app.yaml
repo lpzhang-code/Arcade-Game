@@ -1,0 +1,19 @@
+application: lpz-arcadegame
+version: 1
+api_version: 1
+runtime: python27
+threadsafe: yes
+
+handlers:
+- url: /
+  static_files: index.html
+  upload: index.html
+  
+- url: /css
+  static_dir: css
+  
+- url: /js
+  static_dir: js
+  
+- url: /images
+  static_dir: images
