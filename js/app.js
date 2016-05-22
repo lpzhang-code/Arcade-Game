@@ -1,15 +1,14 @@
-// Enemies our player must avoid
+//  constructor for enemy objects plus prototype containing update and render methods
+
 var Enemy = function() {
     this.sprite = 'images/enemy-bug.png';
 };
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
     // enemies move across screen with variable speed
-    this.x += 500 * Math.random() * dt;
+    this.x += 200 * dt;
     
-    // place enemy back on to left side of canvas once they run off it
+    // place back onto canvas once they run off
     if (this.x > 505) {
         this.x = -50;
     }
@@ -21,83 +20,69 @@ Enemy.prototype.update = function(dt) {
     }
 };
 
-// Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 
-// Player functional class
+
+//  constructor for player object and prototype for update, render and handle input methods
+
+var PLAYER_X = 200;
+var PLAYER_Y = 400;
+
 var Player = function() {
-    // set initial location
     this.x = PLAYER_X;
     this.y = PLAYER_Y;
-    // set character image
     this.sprite = 'images/char-cat-girl.png';
 };
 
-// variables holding the player's initial position and score;
-var PLAYER_X = 200;
-var PLAYER_Y = 400;
-var score = 0;
-
-
 Player.prototype.update = function() {
-    // once player has reached water
+    // reset position if they reach water
     if (this.y < 40) {
         this.x = PLAYER_X;
         this.y = PLAYER_Y;
-        score++;
     }
 };
     
 Player.prototype.render = function() {
-    // render the player on screen
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    // render the score on screen
-    ctx.fillStyle = 'white';
-    ctx.font = '50px Arial';
-    ctx.fillText(score, 450, 100);
 };
     
 Player.prototype.handleInput = function(key) {
-    // when keypress is up
     if (key == 'up') {
         this.y -= 90;
     }
-    // when keypress is down and not near boundary
     if (key == 'down' && this.y < 400) {
         this.y += 90;
     }
-    // when keypress is left and not near boundary
     if (key == 'left' && this.x > 90) {
         this.x -= 100;
     }
-    // when keypress is right and not near boundary
     if (key == 'right' && this.x < 400) {
         this.x += 100;
     }
 };
 
 
-// instantiate player
+
+// instantiate player and enemies
 player = new Player();
 
-// instantiate enemies
 var allEnemies = [];
 
 for (var i = 0; i < 3; i++) {
     var enemy = new Enemy();
     // set varying initial positions
-    enemy.x = i * 200;
+    enemy.x = i * 250;
     enemy.y = 40 + (i * 100);
     // store in array
     allEnemies.push(enemy);
 }
 
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+
+// listen for key presses and pass them to player.handleInput function
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
