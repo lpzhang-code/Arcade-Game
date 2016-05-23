@@ -17,6 +17,13 @@ Enemy.prototype.update = function(dt) {
     if (Math.abs(this.x - player.x) < 30 && Math.abs(this.y - player.y) < 30) {
         player.x = PLAYER_X;
         player.y = PLAYER_Y;
+        player.lives -= 1;
+        if (player.lives < 1) {
+            $('#instructions h4').text('Game Over!');
+            $('#instructions p').text('You have collected ' + player.score + ' gems!');
+            $('#instructions a').text('Try Again ?');
+            reset();
+        }
     }
 };
 
@@ -35,6 +42,9 @@ var Player = function(image) {
     this.x = PLAYER_X;
     this.y = PLAYER_Y;
     this.sprite = image;
+    this.lives = 3;
+    this.score = 0;
+    this.highscore = 0;
 };
 
 Player.prototype.update = function() {
@@ -67,7 +77,7 @@ Player.prototype.handleInput = function(key) {
 
 
 // Instantiate entities and declare variables
-var player;
+var player= new Player('images/char-boy.png')
 var selector = new Player('images/selector.png');
 var choosing;   // global variable to record game stage
 
@@ -125,9 +135,15 @@ document.addEventListener('keyup', function(e) {
             else {
                 var position = selector.x / 100;
             }
-            player = new Player(characters[position]);
-            choosing = false;
+            
+            // reset player properties
+            player.sprite = characters[position];
+            player.lives = 3;
+            player.score = 0;
+            
+            // run the game loop
             cancelAnimationFrame(frame);
+            choosing = false;
             main();
         }
     }

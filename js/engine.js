@@ -20,7 +20,7 @@ var Engine = (function(global) {
         frame;
 
     canvas.width = 505;
-    canvas.height = 606;
+    canvas.height = 640;
     doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
@@ -134,7 +134,7 @@ var Engine = (function(global) {
         cancelAnimationFrame(frame);
         //  display modal with instructions
         $('#instructions').modal('show');
-        $('.play').click(function(){
+        $('#instructions a').click(function(){
             $('#instructions').modal('hide');
             choosing = true;
             renderCharacters();
@@ -178,5 +178,6 @@ var Engine = (function(global) {
      */
     global.ctx = ctx;
     global.main = main;
+    global.reset = reset;
     global.frame = frame;
 })(this);
