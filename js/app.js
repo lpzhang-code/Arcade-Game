@@ -21,7 +21,7 @@ Enemy.prototype.update = function(dt) {
         if (player.lives < 1) {
             $('#instructions h4').text('Game Over!');
             $('#instructions p').text('You have collected ' + player.score + ' gems!');
-            $('#instructions a').text('Try Again ?');
+            $('#instructions a').text('Try Again?');
             reset();
         }
     }
@@ -56,6 +56,13 @@ Player.prototype.update = function() {
 };
     
 Player.prototype.render = function() {
+    // render lives left on screen
+    ctx.fillStyle = 'black';
+    ctx.font = '15px Arcade';
+    ctx.clearRect(0, 0, 505, 40)
+    ctx.fillText('Lives Left:' + this.lives + '    ' + 'Gems Collected:' + this.score, 10, 40);
+    
+    // render player
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
     
@@ -76,7 +83,7 @@ Player.prototype.handleInput = function(key) {
 
 
 
-// Instantiate entities and declare variables
+// Instantiate player, selector, enemies, gems and characters
 var player= new Player('images/char-boy.png')
 var selector = new Player('images/selector.png');
 var choosing;   // global variable to record game stage
@@ -142,7 +149,7 @@ document.addEventListener('keyup', function(e) {
             player.score = 0;
             
             // run the game loop
-            cancelAnimationFrame(frame);
+            cancelAnimationFrame(selectloop);
             choosing = false;
             main();
         }
