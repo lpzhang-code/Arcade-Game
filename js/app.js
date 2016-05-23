@@ -1,7 +1,7 @@
-//  constructor for enemy objects plus prototype containing update and render methods
+//  Constructor for enemy objects plus prototype containing update and render methods
 
-var Enemy = function() {
-    this.sprite = 'images/enemy-bug.png';
+var Enemy = function(image) {
+    this.sprite = image;
 };
 
 Enemy.prototype.update = function(dt) {
@@ -26,15 +26,15 @@ Enemy.prototype.render = function() {
 
 
 
-//  constructor for player object and prototype for update, render and handle input methods
+//  Constructor for player object and prototype for update, render and handle input methods
 
 var PLAYER_X = 200;
 var PLAYER_Y = 400;
 
-var Player = function() {
+var Player = function(image) {
     this.x = PLAYER_X;
     this.y = PLAYER_Y;
-    this.sprite = 'images/char-cat-girl.png';
+    this.sprite = image;
 };
 
 Player.prototype.update = function() {
@@ -66,30 +66,69 @@ Player.prototype.handleInput = function(key) {
 
 
 
-// instantiate player and enemies
-player = new Player();
+// Instantiate entities and declare variables
+var player;
+var selector = new Player('images/selector.png');
+var choosing;   // global variable to record game stage
 
 var allEnemies = [];
-
 for (var i = 0; i < 3; i++) {
-    var enemy = new Enemy();
+    var enemy = new Enemy('images/enemy-bug.png');
     // set varying initial positions
     enemy.x = i * 250;
     enemy.y = 40 + (i * 100);
-    // store in array
     allEnemies.push(enemy);
+}
+
+var allCharacters = [];
+var characters = ['images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
+        'images/char-horn-girl.png'];
+for (var i = 0; i < 5; i++) {
+    var character = new Enemy(characters[i]);
+    character.x = i * 100;
+    character.y = 400;
+    allCharacters.push(character);
 }
 
 
 
-// listen for key presses and pass them to player.handleInput function
+// Listen for key presses and pass them to handleInput function for player or selector
+
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
+        13: 'enter',
         37: 'left',
         38: 'up',
         39: 'right',
         40: 'down'
     };
-
-    player.handleInput(allowedKeys[e.keyCode]);
+    
+    var key = allowedKeys[e.keyCode];
+    
+    //  game stage determines whether player or selector responds to key input
+    if (choosing === false) {
+        player.handleInput(key);
+    }
+    
+    if (choosing === true) {
+        if (key === 'left' || key ==='right') {
+            selector.handleInput(key);
+        }
+        // has chosen a character to use, we launch game
+        else if (key === 'enter') {
+            if (selector.x === 0) {
+                var position = 0;
+            }
+            else {
+                var position = selector.x / 100;
+            }
+            player = new Player(characters[position]);
+            choosing = false;
+            cancelAnimationFrame(frame);
+            main();
+        }
+    }
 });

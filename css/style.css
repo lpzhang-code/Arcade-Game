@@ -1,3 +1,7 @@
 body {
     text-align: center;
 }
+
+#instructions h4, p {
+    font-family: 'Press Start 2P';
+}

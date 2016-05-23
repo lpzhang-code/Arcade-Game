@@ -16,7 +16,8 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lastTime;
+        lastTime,
+        frame;
 
     canvas.width = 505;
     canvas.height = 606;
@@ -38,7 +39,8 @@ var Engine = (function(global) {
          * our update function since it may be used for smooth animation.
          */
         updateEntities(dt);
-        render();
+        renderBoard();
+        renderEntities();
 
         /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
@@ -48,7 +50,7 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
-        requestAnimationFrame(main);
+        frame = requestAnimationFrame(main);
     }
 
     /* This function does some initial setup that should only occur once,
@@ -58,7 +60,6 @@ var Engine = (function(global) {
     function init() {
         reset();
         lastTime = Date.now();
-        main();
     }
 
     /* This function loops through all of the
@@ -78,7 +79,7 @@ var Engine = (function(global) {
      * loop of the game engine because that's how games work -
      * they are flipbooks drawing the entire screen over and over.
      */
-    function render() {
+    function renderBoard() {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
@@ -109,11 +110,9 @@ var Engine = (function(global) {
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
-        renderEntities();
     }
 
-    /* This function is called by the render function each game loop.
-     * Its purpose is to then call the render functions you have defined
+    /* This function's purpose is to call the render functions you have defined
      * on your enemy and player entities within app.js
      */
     function renderEntities() {
@@ -132,7 +131,24 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        cancelAnimationFrame(frame);
+        //  display modal with instructions
+        $('#instructions').modal('show');
+        $('.play').click(function(){
+            $('#instructions').modal('hide');
+            choosing = true;
+            renderCharacters();
+        })
+    }
+    
+    function renderCharacters() {
+        renderBoard();
+        selector.render();
+        for (var i = 0; i < 5; i++) {
+            allCharacters[i].render()
+        }
+        
+        frame = requestAnimationFrame(renderCharacters);
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -144,8 +160,15 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
+        'images/selector.png',
+        'images/green.png',
+        'images/blue.png',
+        'images/orange.png',
         'images/char-boy.png',
-        'images/char-cat-girl.png'
+        'images/char-cat-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
+        'images/char-horn-girl.png'
     ]);
     Resources.onReady(init);
 
@@ -154,4 +177,6 @@ var Engine = (function(global) {
      * from within their app.js files.
      */
     global.ctx = ctx;
+    global.main = main;
+    global.frame = frame;
 })(this);
