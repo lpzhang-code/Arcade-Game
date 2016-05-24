@@ -19,6 +19,7 @@ Enemy.prototype.update = function(dt) {
         player.y = PLAYER_Y;
         player.lives -= 1;
         if (player.lives < 1) {
+            choosing = true;
             $('#instructions h4').text('Game Over!');
             $('#instructions p').text('You have collected ' + player.score + ' gems!');
             $('#instructions a').text('Try Again?');
@@ -97,7 +98,7 @@ Player.prototype.handleInput = function(key) {
 // Instantiate player, selector, enemies, gems and characters
 var player= new Player('images/char-boy.png')
 var selector = new Player('images/selector.png');
-var choosing;   // global variable to record game stage
+var choosing = true;   // global variable to record game stage
 
 var allEnemies = [];
 for (var i = 0; i < 3; i++) {
@@ -160,7 +161,6 @@ document.addEventListener('keyup', function(e) {
             player.score = 0;
             
             // run the game loop
-            cancelAnimationFrame(selectloop);
             choosing = false;
             main();
         }

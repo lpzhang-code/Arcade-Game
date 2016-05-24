@@ -28,6 +28,9 @@ var Engine = (function(global) {
      * and handles properly calling the update and render methods.
      */
     function main() {
+        if (choosing === true) {
+            cancelAnimationFrame(gameloop);
+        }
         /* Get our time delta information which is required if your game
          * requires smooth animation. Because everyone's computer processes
          * instructions at different speeds we need a constant value that
@@ -132,17 +135,18 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        cancelAnimationFrame(gameloop);
         //  display modal with instructions
         $('#instructions').modal('show');
         $('#instructions a').click(function(){
             $('#instructions').modal('hide');
-            choosing = true;
             renderCharacters();
         })
     }
     
     function renderCharacters() {
+        if (choosing === false) {
+            cancelAnimationFrame(selectloop);
+        }
         renderBoard();
         selector.render();
         for (var i = 0; i < 5; i++) {
@@ -182,5 +186,4 @@ var Engine = (function(global) {
     global.ctx = ctx;
     global.main = main;
     global.reset = reset;
-    global.selectloop = selectloop;
 })(this);
