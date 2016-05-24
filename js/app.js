@@ -43,7 +43,7 @@ var Player = function(image) {
     this.y = PLAYER_Y;
     this.sprite = image;
     this.lives = 3;
-    this.score = 0;
+    this.score = 5;
     this.highscore = 0;
 };
 
@@ -56,11 +56,22 @@ Player.prototype.update = function() {
 };
     
 Player.prototype.render = function() {
+    // clear top part of canvas (scoreboard)
+    ctx.clearRect(0, 0, 505, 50);
+    
     // render lives left on screen
-    ctx.fillStyle = 'black';
-    ctx.font = '15px Arcade';
-    ctx.clearRect(0, 0, 505, 40)
-    ctx.fillText('Lives Left:' + this.lives + '    ' + 'Gems Collected:' + this.score, 10, 40);
+    for (var i = 0, l = this.lives; i < l; i++) {
+        heart = new Image();
+        heart.src = 'images/Heart.png';
+        ctx.drawImage(heart, i * 30, 5, 30, 50);
+    }
+    
+    // render score on screen
+    for (var i = 0, s = this.score; i < s; i++) {
+        star = new Image();
+        star.src = 'images/Star.png';
+        ctx.drawImage(star, i * 30 + 350, 0, 30, 50);
+    }
     
     // render player
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);

@@ -165,6 +165,8 @@ var Engine = (function(global) {
         'images/green.png',
         'images/blue.png',
         'images/orange.png',
+        'images/Heart.png',
+        'images/Star.png',
         'images/char-boy.png',
         'images/char-cat-girl.png',
         'images/char-pink-girl.png',
