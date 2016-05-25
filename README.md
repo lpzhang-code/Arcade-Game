@@ -1,5 +1,4 @@
 #Arcade Game#
-This is an HTML5 Canvas powered desktop video game, developed using best practices in object-oriented Javascript.
 
 ###Objectives###
 The user selects a character to play with and has three lives to collect five gems in order to win. Lives are lost if the player runs into enemy bugs. Game information is displayed on a scoreboard above the game canvas. 
