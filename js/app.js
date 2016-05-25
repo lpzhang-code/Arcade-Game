@@ -1,31 +1,93 @@
-//  Constructor for enemy objects plus prototype containing update and render methods
+/*
+ * App.js
+ * Defines constructors for player, selector, enemy, character, and gem objects.
+ * Also defines prototypical methods to be called by Engine.js for updating and rendering.
+ * Instantiates relevant game objects.
+ */
 
+
+/*
+ * Constructor for enemy/gem objects and defining prototype for
+ * update, render, collision, shuffle, collect methods.
+ */
 var Enemy = function(image) {
     this.sprite = image;
 };
 
 Enemy.prototype.update = function(dt) {
-    // enemies move across screen with variable speed
-    this.x += 200 * dt;
+    /*
+     * Enemies move across screen with variable speed
+     * and are placed back onto canvas when they run off.
+     */
+    this.x += 100 * dt + (Math.random() * 5);
     
-    // place back onto canvas once they run off
     if (this.x > 505) {
         this.x = -50;
     }
-    
-    // collision detection
+};
+
+Enemy.prototype.collision = function() {
+    /*
+     * Method for collision detection of enemy bugs with player.
+     * End the game if they run out of lives, otherwise reset the player's position.
+     */
     if (Math.abs(this.x - player.x) < 30 && Math.abs(this.y - player.y) < 30) {
         player.x = PLAYER_X;
         player.y = PLAYER_Y;
         player.lives -= 1;
         if (player.lives < 1) {
-            choosing = true;
+            choosing = 'pause';
             $('#instructions h4').text('Game Over!');
-            $('#instructions p').text('You have collected ' + player.score + ' gems!');
+            $('#instructions p').text('You managed to collect ' + player.score + ' gems! Better luck next time!');
             $('#instructions a').text('Try Again?');
             reset();
         }
     }
+};
+
+Enemy.prototype.collect = function() {
+    /*
+     * Similar method of detecting when player has collected a gemstone.
+     * We will end the game if they collect five, otherwise we place a new stone.
+     */
+    if (Math.abs(this.x - player.x) < 30 && Math.abs(this.y - player.y) < 30) {
+        player.score += 1;
+        if (player.score > 4) {
+            choosing = 'pause';
+            player.gameswon += 1;
+            player.x = PLAYER_X;
+            player.y = PLAYER_Y;
+            $('#instructions h4').text('You Win!');
+            $('#instructions p').text('You have won ' + player.gameswon + ' games so far!');
+            $('#instructions a').text('Try Again?');
+            reset();
+        }
+        else {
+            this.shuffle();
+        }
+    }
+};
+
+Enemy.prototype.shuffle = function() {
+    /*
+     * If the gem has been collected, we will place a new one.
+     * Position is random and gem colour changes everytime function is called.
+     */
+    if (this.sprite === 'images/orange.png') {
+        this.sprite = 'images/blue.png';
+    }
+    else if (this.sprite === 'images/blue.png') {
+        this.sprite = 'images/green.png';
+    }
+    else if (this.sprite === 'images/green.png') {
+        this.sprite = 'images/orange.png';
+    }
+    
+    var gem_x = [1, 101, 202, 303, 402];
+    var gem_y = [45, 145, 240];
+    
+    this.x = gem_x[Math.floor(Math.random() * gem_x.length)];
+    this.y = gem_y[Math.floor(Math.random() * gem_y.length)];
 };
 
 Enemy.prototype.render = function() {
@@ -34,29 +96,32 @@ Enemy.prototype.render = function() {
 
 
 
-//  Constructor for player object and prototype for update, render and handle input methods
-
+/*
+ * Constructor for player/selector objects and
+ * defines prototype for update, render and handleInput methods.
+ */
 var PLAYER_X = 200;
 var PLAYER_Y = 400;
 
 var Player = function(image) {
+    /*
+     * Constructor sets basic object attributes like
+     * image sprite, position, and stats
+     */
     this.x = PLAYER_X;
     this.y = PLAYER_Y;
     this.sprite = image;
     this.lives = 3;
-    this.score = 5;
-    this.highscore = 0;
-};
-
-Player.prototype.update = function() {
-    // reset position if they reach water
-    if (this.y < 40) {
-        this.x = PLAYER_X;
-        this.y = PLAYER_Y;
-    }
+    this.score = 0;
+    this.gameswon = 0;
 };
     
 Player.prototype.render = function() {
+    /*
+     * Render player score and lives left on top of screen.
+     * Render the player/selector itself too
+     */
+    
     // clear top part of canvas (scoreboard)
     ctx.clearRect(0, 0, 505, 50);
     
@@ -79,7 +144,10 @@ Player.prototype.render = function() {
 };
     
 Player.prototype.handleInput = function(key) {
-    if (key == 'up') {
+    /*
+     * Move player/selector according to keyboard input.
+     */
+    if (key == 'up' && this.y > 40) {
         this.y -= 90;
     }
     if (key == 'down' && this.y < 400) {
@@ -95,17 +163,23 @@ Player.prototype.handleInput = function(key) {
 
 
 
-// Instantiate player, selector, enemies, gems and characters
-var player= new Player('images/char-boy.png')
+/*
+ * Instantiate player, selector, and gem.
+ * Instantiate multiple enemy bugs and characters and
+ * push them onto an array.
+ */
+var player= new Player();
 var selector = new Player('images/selector.png');
-var choosing = true;   // global variable to record game stage
+var choosing;   // global variable to record game stage
+var gem = new Enemy('images/orange.png');
 
 var allEnemies = [];
 for (var i = 0; i < 3; i++) {
     var enemy = new Enemy('images/enemy-bug.png');
     // set varying initial positions
-    enemy.x = i * 250;
-    enemy.y = 40 + (i * 100);
+    var enemy_x = [1, 303, 402];
+    enemy.x = enemy_x[Math.floor(Math.random() * enemy_x.length)];
+    enemy.y = 40 + (i * 101);
     allEnemies.push(enemy);
 }
 
@@ -124,8 +198,10 @@ for (var i = 0; i < 5; i++) {
 
 
 
-// Listen for key presses and pass them to handleInput function for player or selector
-
+/*
+ * Listen for key presses and
+ * pass them to player/selector handleInput function.
+ */
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         13: 'enter',
@@ -137,7 +213,7 @@ document.addEventListener('keyup', function(e) {
     
     var key = allowedKeys[e.keyCode];
     
-    //  game stage determines whether player or selector responds to key input
+    //  game stage determines whether player/selector responds to key input
     if (choosing === false) {
         player.handleInput(key);
     }
@@ -162,6 +238,7 @@ document.addEventListener('keyup', function(e) {
             
             // run the game loop
             choosing = false;
+            gem.shuffle();
             main();
         }
     }

@@ -1,8 +1,13 @@
-#Frogger Game#
-Here we have my implementation for the classic video game Frogger. 
+#Arcade Game#
+This is an HTML5 Canvas powered desktop video game, developed using best practices in object-oriented Javascript.
 
-###How to run the game###
-Getting started is easy, simply open index.html and the game will begin running.
+###Objectives###
+The user selects a character to play with and has three lives to collect five gems in order to win. Lives are lost if the player runs into enemy bugs. Game information is displayed on a scoreboard above the game canvas. 
 
-###How to play the game###
-The game objective is to make the player reach the water as many times without being hit by a moving enemy. The player can be controlled using the directional keys (up, down, left, right) on the keyboard. There is a scoreboard on the top right corner showing how many times the player has successfully made it to the water without being hit. 
+###How to Play###
+The player and selector can be controlled using directional arrow keys. Use the enter or return key to select a character. 
+
+###Ideas for Improvement###
+* Add touchscreen functionality so that the game can be played not only from desktop but also using a mobile or tablet device.
+* Persist game information into a RDBMS, and dynamically display important statistics in the background.
+* Create new levels so that after winning a game, the player faces different challenges and/or tasks to complete.

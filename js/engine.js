@@ -21,7 +21,7 @@ var Engine = (function(global) {
         gameloop;
 
     canvas.width = 505;
-    canvas.height = 640;
+    canvas.height = 600;
     doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
@@ -74,8 +74,9 @@ var Engine = (function(global) {
     function updateEntities(dt) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
+            enemy.collision();
         });
-        player.update();
+        gem.collect();
     }
 
     /* This function initially draws the "game level", it will then call
@@ -126,7 +127,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
+        gem.render();
         player.render();
     }
 
@@ -139,6 +140,7 @@ var Engine = (function(global) {
         $('#instructions').modal('show');
         $('#instructions a').click(function(){
             $('#instructions').modal('hide');
+            choosing = true;
             renderCharacters();
         })
     }
