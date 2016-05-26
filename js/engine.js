@@ -62,6 +62,7 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
+        $('#instructions').modal({backdrop: 'static', keyboard: false})
         reset();
         lastTime = Date.now();
     }
