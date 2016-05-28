@@ -83,12 +83,30 @@ Enemy.prototype.shuffle = function() {
         this.sprite = 'images/orange.png';
     }
     
+    var positions = this.positions();
+    
+    while (true) {
+        if (this.x === positions[0] && this.y === positions[1] ) {
+            positions = this.positions();
+        }
+        else {
+            break;
+        }
+    }
+    
+    this.x = positions[0];
+    this.y = positions[1];
+};
+
+Enemy.prototype.positions = function() {
     var gem_x = [1, 101, 202, 303, 402];
     var gem_y = [45, 145, 240];
     
-    this.x = gem_x[Math.floor(Math.random() * gem_x.length)];
-    this.y = gem_y[Math.floor(Math.random() * gem_y.length)];
-};
+    var xpos = gem_x[Math.floor(Math.random() * gem_x.length)];
+    var ypos = gem_y[Math.floor(Math.random() * gem_y.length)];
+    return [xpos, ypos];
+}
+
 
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
