@@ -54,6 +54,7 @@ Enemy.prototype.collect = function() {
         player.score += 1;
         if (player.score > 4) {
             choosing = 'pause';
+            this.x = 600;
             player.gameswon += 1;
             player.x = PLAYER_X;
             player.y = PLAYER_Y;
